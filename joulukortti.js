@@ -18,7 +18,7 @@ function loop(newtime) {
 function draw(dt) {
     let canvas = document.getElementById('screen');
     let ctx = canvas.getContext('2d');
-    ctx.font = "48px monospace";
+    ctx.font = "24px monospace";
 
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
