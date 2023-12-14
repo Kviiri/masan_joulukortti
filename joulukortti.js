@@ -1,5 +1,5 @@
 function init() {
-	let canvas = document.getElementById('screen');
+    let canvas = document.getElementById('screen');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     window.requestAnimationFrame(newtime => {
@@ -9,8 +9,8 @@ function init() {
 }
 
 function loop(newtime) {
-	const dt = newtime - oldtime;
-	draw(dt);
+    const dt = newtime - oldtime;
+    draw(dt);
     window.requestAnimationFrame(loop);
 
 }
@@ -22,43 +22,62 @@ function draw(dt) {
 
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-    drawIntroScene(dt, ctx, 20000);
-    drawSnowScene(dt, ctx, 28000);
+    drawIntroScene(dt, ctx, 0);
+    drawSnowScene(dt, ctx, 0, 28000);
 }
 
 function drawIntroScene(dt, ctx, sceneLength) {
-	if (dt >= sceneLength) return;
-	ctx.save();
+    if (dt >= sceneLength) return;
+    ctx.save();
     ctx.fillStyle = '#FFF';
     let festive_str = 'Hyvää joulua Masa! Hyvää joulua Masa! Hyvää joulua Masa! Hyvää joulua Masa! ';
     for (let i = 0; i < 14; i++) {
-    	for (let spos = 0; spos < festive_str.length; spos++) {
-    		let fadeout = sceneLength - dt;
-    		let shine = Math.sin(-i*8 + spos*0.1 + dt/200);
-    		ctx.globalAlpha = Math.min(
-    			shine/2 + 0.6,
-    			fadeout,
-    			1
-    		);
-    		ctx.fillStyle = `rgb(
-    			255,
-    			${215-shine*215 + 40},
-    			${215-shine*215 + 40}
-    		`;
-    		ctx.fillText(
-    			festive_str[spos],
-    			-240 + spos * 27 + i * 40 - dt/20 + Math.sin((dt+20*spos)/270)*8,
-    			i * 108 + Math.cos((dt+80*spos*0.8)/270)*14
-    		);
-    	}
+        for (let spos = 0; spos < festive_str.length; spos++) {
+            let fadeout = sceneLength - dt;
+            let shine = Math.sin(-i*8 + spos*0.1 + dt/200);
+            ctx.globalAlpha = Math.min(
+                shine/2 + 0.6,
+                fadeout,
+                1
+            );
+            ctx.fillStyle = `rgb(
+                255,
+                ${215-shine*215 + 40},
+                ${215-shine*215 + 40}
+            `;
+            ctx.fillText(
+                festive_str[spos],
+                -240 + spos * 27 + i * 40 - dt/20 + Math.sin((dt+20*spos)/270)*8,
+                i * 108 + Math.cos((dt+80*spos*0.8)/270)*14
+            );
+        }
     }
     ctx.restore();
 }
 
-function drawSnowScene(dt, ctx, sceneLength) {
-    if (dt >= sceneLength) return;
-	ctx.save();
-    ctx.fillStyle = '#FFF';
-    
+function drawSnowScene(dt, ctx, sceneStart, sceneLength) {
+    if (dt >= sceneLength || dt < sceneStart) return;
+    ctx.save();
+    ctx.fillStyle = '#DDD';
+    for(let i = 0; i < 40; i++) {
+        for (let j = 0; j < 24; j++) {
+            ctx.beginPath();
+                ctx.arc(
+                    600 + j * 120 - dt - Math.cos(dt/80)*18.8,
+                    -800 + (i+(j%2/2)) * 80 - Math.sin(dt/90) * 9 + dt * 0.09,
+                    4 + Math.sin(i*dt/800)*0.8,
+                    0,
+                    Math.PI * 2
+                )
+                ctx.fill();
+            }
+    }
+    ctx.fillStyle='#FFF';
+    ctx.fillRect(
+    	0,
+    	window.innerHeight * (1-Math.min(((dt-sceneStart)/4000), 0.8)),
+    	window.innerWidth,
+    	window.innerHeight
+    );
     ctx.restore();
 }
