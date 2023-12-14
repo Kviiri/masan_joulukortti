@@ -23,8 +23,8 @@ function draw(dt) {
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
     drawIntroScene(dt, ctx, 12000);
-    drawSnowScene(dt, ctx, 12000, 20000);
-    drawLandScape(dt, ctx, 20000, 40000);
+    drawSnowScene(dt, ctx, 12000, 18000);
+    drawLandScape(dt, ctx, 18000, 40000);
 }
 
 function drawIntroScene(dt, ctx, sceneLength) {
