@@ -22,8 +22,9 @@ function draw(dt) {
 
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-    drawIntroScene(dt, ctx, 0);
-    drawSnowScene(dt, ctx, 0, 28000);
+    drawIntroScene(dt, ctx, 12000);
+    drawSnowScene(dt, ctx, 12000, 20000);
+    drawLandScape(dt, ctx, 20000, 40000);
 }
 
 function drawIntroScene(dt, ctx, sceneLength) {
@@ -63,8 +64,8 @@ function drawSnowScene(dt, ctx, sceneStart, sceneLength) {
         for (let j = 0; j < 24; j++) {
             ctx.beginPath();
                 ctx.arc(
-                    600 + j * 120 - dt - Math.cos(dt/80)*18.8,
-                    -800 + (i+(j%2/2)) * 80 - Math.sin(dt/90) * 9 + dt * 0.09,
+                    sceneStart + 600 + j * 120 - dt - Math.cos(dt/80)*18.8,
+                    -800 + (i+(j%2/2)) * 80 - Math.sin(dt/90) * 9 + (dt-sceneStart) * 0.09,
                     4 + Math.sin(i*dt/800)*0.8,
                     0,
                     Math.PI * 2
@@ -79,5 +80,46 @@ function drawSnowScene(dt, ctx, sceneStart, sceneLength) {
     	window.innerWidth,
     	window.innerHeight
     );
+    ctx.restore();
+}
+
+function drawLandScape(dt, ctx, sceneStart, sceneLength) {
+	if (dt >= sceneLength || dt < sceneStart) return;
+	ctx.save();
+	//snow landscape from previous scene
+	ctx.fillStyle='#FFF';
+    ctx.fillRect(
+    	0,
+    	window.innerHeight * 0.2,
+    	window.innerWidth,
+    	window.innerHeight
+    );
+    ctx.restore();
+
+    //trees!
+    for (let i = 0; i < 32; i++) {
+    	ctx.fillStyle='#B99';
+    	ctx.fillRect(
+    		40 - (dt/4) % 40 + 40*i,
+    		window.innerHeight * 0.2 - 10,
+    		10,
+    		10
+    	);
+    	ctx.fillStyle='#2A1'
+    	ctx.save();
+    	ctx.translate(40 - (dt/4) % 40 + 40*i, window.innerHeight * 0.2 - 10);
+    	ctx.beginPath();
+    	ctx.lineTo(-10, 0);
+    	ctx.lineTo(5, -80);
+    	ctx.lineTo(20, 0);
+    	ctx.fill();
+    	ctx.restore();
+    }
+    ctx.fillStyle = '#000';
+    ctx.fillText("Sinut on kutsuttu", Math.sin(dt/800) * 40 + 60, window.innerHeight * 0.2 + 40);
+    ctx.fillText("SYÖMÄÄN", Math.sin(400 + dt/800) * 40 + 120, window.innerHeight * 0.2 + 80);
+    ctx.fillText("isoveljiesi kanssa", Math.sin(250 + dt/800) * 40 + 60, window.innerHeight * 0.2 + 120);
+
+
     ctx.restore();
 }
