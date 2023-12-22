@@ -83,19 +83,18 @@ function drawSnowScene(dt, ctx, sceneStart, sceneLength) {
 }
 
 function drawLandScape(dt, ctx, sceneStart, sceneLength) {
-	if (dt >= sceneLength || dt < sceneStart) return;
+    if (dt >= sceneLength || dt < sceneStart) return;
+    let shading = Math.min((dt - sceneStart - 2000) / 4000, 1);
+
+    ctx.fillStyle = `rgba(
+      ${40 * shading},
+      ${40 * shading},
+      ${160 * shading},
+    1)`
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-	ctx.save();
-	//snow landscape from previous scene
-	ctx.fillStyle='#FFF';
-    ctx.fillRect(
-    	0,
-    	window.innerHeight * 0.2,
-    	window.innerWidth,
-    	window.innerHeight
-    );
-    ctx.restore();
+    ctx.save();
+
 
     //morning gradient
     const sun = ctx.createRadialGradient (
@@ -106,35 +105,78 @@ function drawLandScape(dt, ctx, sceneStart, sceneLength) {
         window.innerHeight * 0.2,
         80 * Math.min((dt - sceneStart) / 3000, 1),
     );
-    sun.addColorStop(0, 'rgba(240, 240, 20, 0.9');
-    sun.addColorStop(1, 'rgba(240, 240, 20, 0.01');
+    sun.addColorStop(0, 'rgba(240, 210, 20, 0.9');
+    sun.addColorStop(1, 'rgba(240, 210, 20, 0.01');
     ctx.fillStyle = sun;
     ctx.fillRect(0, 0, window.innerWidth, window.innerWidth);
 
+	//snow landscape from previous scene
+	ctx.fillStyle='#FFF';
+    ctx.fillRect(
+    	0,
+    	window.innerHeight * 0.2,
+    	window.innerWidth,
+    	window.innerHeight
+    );
+    ctx.restore();
+
+
+
     //trees!
     for (let i = 0; i < 16; i++) {
-    	ctx.fillStyle='#B99';
+    	//ctx.fillStyle='#B99';
+        ctx.fillStyle = `rgba(
+          ${176 * shading},
+          ${144 * shading},
+          ${144 * shading},
+          1
+        )`;
     	ctx.fillRect(
     		40 - (dt/4) % 40 + 40*i,
     		window.innerHeight * 0.2 - 10,
     		10,
     		10
     	);
-    	ctx.fillStyle='#2A1'
-    	ctx.save();
-    	ctx.translate(40 - (dt/4) % 40 + 40*i, window.innerHeight * 0.2 - 10);
-    	ctx.beginPath();
-    	ctx.lineTo(-10, 0);
-    	ctx.lineTo(5, -80);
-    	ctx.lineTo(20, 0);
-    	ctx.fill();
-    	ctx.restore();
+    	//ctx.fillStyle='#2A1'
+        ctx.fillStyle = `rgba(
+          ${32 * shading},
+          ${160 * shading},
+          ${16 * shading},
+          1
+        )`;
+        ctx.save();
+        ctx.translate(40 - (dt/4) % 40 + 40*i, window.innerHeight * 0.2 - 10);
+        ctx.beginPath();
+        ctx.lineTo(-10, 0);
+        ctx.lineTo(5, -80);
+        ctx.lineTo(20, 0);
+        ctx.fill();
+        ctx.restore();
     }
+
     ctx.fillStyle = '#000';
     ctx.fillText("Sinut on kutsuttu", Math.sin(dt/800) * 40 + 60, window.innerHeight * 0.2 + 40);
     ctx.fillText("SYÖMÄÄN", Math.sin(400 + dt/800) * 40 + 120, window.innerHeight * 0.2 + 80);
     ctx.fillText("isoveljiesi kanssa", Math.sin(250 + dt/800) * 40 + 60, window.innerHeight * 0.2 + 120);
+    
+    ctx.font = "32px verdana";
 
+    let restaurantScroller = 'VLTAVA – CELLA – KUUKUU – ';
+    let cycleLength = 200;
+    for (let i = 0; i < 16; i++) {
+        ctx.save();
+        let startPoint = ~~(dt/cycleLength);
+        ctx.fillText(
+          restaurantScroller[(startPoint + i)%restaurantScroller.length],
+          i * 32 - (dt % cycleLength)/cycleLength * 32,
+          window.innerHeight * 0.2 + 320
+        )
+        ctx.restore();
+    }
+    ctx.font = ('16px monospace');
+    ctx.fillText("Valitse paikka ja aika;", 8, window.innerHeight - 64);
+    ctx.fillText("me maksamme viulut!", 8, window.innerHeight - 48);
+    ctx.fillText("t. Isoveljesi Ville & Kalle!", 8, window.innerHeight - 32);
 
     ctx.restore();
 }
