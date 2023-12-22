@@ -87,11 +87,10 @@ function drawLandScape(dt, ctx, sceneStart) {
     let shading = Math.min((dt - sceneStart - 2000) / 4000, 1);
 
     ctx.fillStyle = `rgba(
-      ${40 * shading},
-      ${40 * shading},
-      ${160 * shading},
+      ${38 * shading},
+      ${18 * shading},
+      ${80 * shading},
     1)`
-    ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
     ctx.save();
 
@@ -162,6 +161,8 @@ function drawLandScape(dt, ctx, sceneStart) {
     ctx.font = "32px verdana";
 
     let restaurantScroller = 'VLTAVA – CELLA – KUUKUU – ';
+    let restaurantScrollerRev = restaurantScroller.split("").reverse().join("");
+    console.log(restaurantScrollerRev);
     let cycleLength = 200;
     for (let i = 0; i < 16; i++) {
         ctx.save();
@@ -170,9 +171,17 @@ function drawLandScape(dt, ctx, sceneStart) {
           restaurantScroller[(startPoint + i)%restaurantScroller.length],
           i * 32 - (dt % cycleLength)/cycleLength * 32,
           window.innerHeight * 0.2 + 320
-        )
-
-        restaurantScroller[(startPoint + i)%restaurantScroller.length]
+        );
+        ctx.fillText(
+          restaurantScrollerRev[(startPoint + i + 8)%restaurantScrollerRev.length],
+          window.innerWidth - (i * 32) + (dt % cycleLength)/cycleLength * 32,
+          window.innerHeight * 0.2 + 360
+        );
+        ctx.fillText(
+          restaurantScroller[(startPoint + i + 16)%restaurantScroller.length],
+          i * 32 - (dt % cycleLength)/cycleLength * 32,
+          window.innerHeight * 0.2 + 400
+        );
         ctx.restore();
     }
     ctx.font = ('16px monospace');
