@@ -162,7 +162,6 @@ function drawLandScape(dt, ctx, sceneStart) {
 
     let restaurantScroller = 'VLTAVA – CELLA – KUUKUU – ';
     let restaurantScrollerRev = restaurantScroller.split("").reverse().join("");
-    console.log(restaurantScrollerRev);
     let cycleLength = 200;
     for (let i = 0; i < 16; i++) {
         ctx.save();
