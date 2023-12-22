@@ -20,31 +20,28 @@ function draw(dt) {
     let ctx = canvas.getContext('2d');
     ctx.font = "24px monospace";
 
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
     drawIntroScene(dt, ctx, 12000);
     drawSnowScene(dt, ctx, 12000, 18000);
     drawLandScape(dt, ctx, 18000, 40000);
 }
 
 function drawIntroScene(dt, ctx, sceneLength) {
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
     if (dt >= sceneLength) return;
     ctx.save();
     ctx.fillStyle = '#FFF';
     let festive_str = 'Hyvää joulua Masa! Hyvää joulua Masa! Hyvää joulua Masa! Hyvää joulua Masa! ';
     for (let i = 0; i < 14; i++) {
         for (let spos = 0; spos < festive_str.length; spos++) {
-            let fadeout = sceneLength - dt;
+            let fadeout = (sceneLength-dt)/4000;
             let shine = Math.sin(-i*8 + spos*0.1 + dt/200);
-            ctx.globalAlpha = Math.min(
-                shine/2 + 0.6,
-                fadeout,
-                1
-            );
-            ctx.fillStyle = `rgb(
+            ctx.fillStyle = `rgba(
                 255,
                 ${215-shine*215 + 40},
-                ${215-shine*215 + 40}
+                ${215-shine*215 + 40},
+                ${Math.min(fadeout, 1) * (shine/2 + 0.6)}
+            )
             `;
             ctx.fillText(
                 festive_str[spos],
@@ -58,6 +55,8 @@ function drawIntroScene(dt, ctx, sceneLength) {
 
 function drawSnowScene(dt, ctx, sceneStart, sceneLength) {
     if (dt >= sceneLength || dt < sceneStart) return;
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
     ctx.save();
     ctx.fillStyle = '#DDD';
     for(let i = 0; i < 40; i++) {
@@ -85,6 +84,8 @@ function drawSnowScene(dt, ctx, sceneStart, sceneLength) {
 
 function drawLandScape(dt, ctx, sceneStart, sceneLength) {
 	if (dt >= sceneLength || dt < sceneStart) return;
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 	ctx.save();
 	//snow landscape from previous scene
 	ctx.fillStyle='#FFF';
@@ -96,8 +97,22 @@ function drawLandScape(dt, ctx, sceneStart, sceneLength) {
     );
     ctx.restore();
 
+    //morning gradient
+    const sun = ctx.createRadialGradient (
+        window.innerWidth * 0.5,
+        window.innerHeight * 0.2,
+        10 * Math.min((dt - sceneStart) / 3000, 1),
+        window.innerWidth * 0.5,
+        window.innerHeight * 0.2,
+        80 * Math.min((dt - sceneStart) / 3000, 1),
+    );
+    sun.addColorStop(0, 'rgba(240, 240, 20, 0.9');
+    sun.addColorStop(1, 'rgba(240, 240, 20, 0.01');
+    ctx.fillStyle = sun;
+    ctx.fillRect(0, 0, window.innerWidth, window.innerWidth);
+
     //trees!
-    for (let i = 0; i < 32; i++) {
+    for (let i = 0; i < 16; i++) {
     	ctx.fillStyle='#B99';
     	ctx.fillRect(
     		40 - (dt/4) % 40 + 40*i,
