@@ -22,7 +22,7 @@ function draw(dt) {
 
     drawIntroScene(dt, ctx, 12000);
     drawSnowScene(dt, ctx, 12000, 18000);
-    drawLandScape(dt, ctx, 18000, 40000);
+    drawLandScape(dt, ctx, 18000);
 }
 
 function drawIntroScene(dt, ctx, sceneLength) {
@@ -82,8 +82,8 @@ function drawSnowScene(dt, ctx, sceneStart, sceneLength) {
     ctx.restore();
 }
 
-function drawLandScape(dt, ctx, sceneStart, sceneLength) {
-    if (dt >= sceneLength || dt < sceneStart) return;
+function drawLandScape(dt, ctx, sceneStart) {
+    if (dt < sceneStart) return;
     let shading = Math.min((dt - sceneStart - 2000) / 4000, 1);
 
     ctx.fillStyle = `rgba(
@@ -171,6 +171,8 @@ function drawLandScape(dt, ctx, sceneStart, sceneLength) {
           i * 32 - (dt % cycleLength)/cycleLength * 32,
           window.innerHeight * 0.2 + 320
         )
+
+        restaurantScroller[(startPoint + i)%restaurantScroller.length]
         ctx.restore();
     }
     ctx.font = ('16px monospace');
