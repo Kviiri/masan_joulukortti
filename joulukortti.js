@@ -102,7 +102,7 @@ function drawLandScape(dt, ctx, sceneStart) {
         10 * Math.min((dt - sceneStart) / 3000, 1),
         window.innerWidth * 0.5,
         window.innerHeight * 0.2,
-        80 * Math.min((dt - sceneStart) / 3000, 1),
+        120 * Math.min((dt - sceneStart) / 3000, 1),
     );
     sun.addColorStop(0, 'rgba(240, 210, 20, 0.9');
     sun.addColorStop(1, 'rgba(240, 210, 20, 0.01');
